@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily English Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ink:#172a3a;
+  --muted:#778592;
+  --paper:#f5f6f2;
+  --white:#ffffff;
+  --green:#b9f278;
+  --green-dark:#345c25;
+  --blue:#dceaff;
+  --yellow:#fff0a9;
+  --line:#e8ebe5;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"DM Sans","Noto Sans KR",sans-serif;
+  line-height:1.7;
+}
+button {font:inherit;cursor:pointer}
+button:focus-visible {outline:3px solid #4c85c9;outline-offset:3px}
+.app {max-width:1180px;margin:auto;padding:26px 34px 70px}
+.topbar {display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:36px}
+.brand {display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.6px}
+.brand-icon {width:42px;height:42px;border-radius:14px;background:var(--ink);color:var(--green);display:grid;place-items:center;font-size:21px}
+.top-label {font-size:12px;color:var(--muted);font-weight:700;letter-spacing:1.3px}
+.streak {background:white;border:1px solid var(--line);padding:9px 15px;border-radius:30px;font-size:13px;font-weight:700}
+.layout {display:grid;grid-template-columns:255px minmax(0,1fr);gap:34px;align-items:start}
+.sidebar {position:sticky;top:20px}
+.eyebrow {font-size:11px;letter-spacing:1.7px;text-transform:uppercase;color:var(--muted);font-weight:800}
+.side-title {font-size:25px;line-height:1.25;letter-spacing:-1px;margin:8px 0 10px}
+.side-copy {font-size:13px;color:var(--muted);margin:0 0 22px}
+.progress-card {background:var(--ink);color:white;border-radius:22px;padding:20px;margin-bottom:28px}
+.progress-top {display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#d3dce2}
+.progress-number {font-size:30px;font-weight:800;letter-spacing:-1px;margin:8px 0 11px}
+.progress-track {height:6px;border-radius:10px;background:#40515e;overflow:hidden}
+.progress-fill {height:100%;background:var(--green);width:0;transition:width .3s}
+.lesson-nav {display:flex;flex-direction:column;gap:7px}
+.lesson-btn {display:flex;align-items:center;gap:12px;text-align:left;border:1px solid transparent;background:transparent;border-radius:15px;padding:12px 11px;color:var(--ink);width:100%;transition:.2s}
+.lesson-btn:hover {background:#e9eee6}
+.lesson-btn.active {background:white;border-color:#e4e9df;box-shadow:0 4px 15px #172a3a08}
+.lesson-num {width:36px;height:36px;flex-shrink:0;border-radius:12px;display:grid;place-items:center;background:#e9ece6;font-size:12px;font-weight:800}
+.lesson-btn.active .lesson-num {background:var(--green)}
+.lesson-btn.done .lesson-num {background:var(--green);color:var(--green-dark)}
+.lesson-meta {min-width:0}
+.lesson-name {font-size:13px;font-weight:700;display:block;line-height:1.4}
+.lesson-tag {font-size:11px;color:var(--muted);display:block;margin-top:3px}
+.main {min-width:0}
+.hero {background:var(--green);border-radius:28px;padding:30px 34px 28px;position:relative;overflow:hidden;margin-bottom:22px}
+.hero:after {content:"Aa";position:absolute;right:25px;bottom:-46px;font-size:145px;font-weight:800;color:#ffffff65;letter-spacing:-13px;pointer-events:none}
+.hero-label {font-size:11px;letter-spacing:1.7px;font-weight:800;color:#345c25}
+.hero h1 {font-size:clamp(30px,4vw,43px);line-height:1.12;letter-spacing:-1.8px;margin:12px 0 12px;max-width:500px}
+.hero p {font-size:14px;color:#35512c;margin:0;max-width:470px}
+.hero-bottom {display:flex;gap:8px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
+.pill {border:1px solid #315a2730;background:#ffffff80;border-radius:30px;padding:6px 11px;font-size:11px;font-weight:700}
+.stepbar {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.step {border-radius:14px;padding:12px 14px;background:#ecefe9;color:#778592;font-size:12px;font-weight:700;display:flex;gap:9px;align-items:center}
+.step span {width:24px;height:24px;border-radius:8px;background:#fff;display:grid;place-items:center;font-size:11px}
+.step.active {background:var(--ink);color:white}
+.step.active span {background:var(--green);color:var(--ink)}
+.step.past {background:#e3f0d9;color:#345c25}
+.panel {background:white;border:1px solid var(--line);border-radius:24px;padding:27px 30px;margin-bottom:18px}
+.panel-head {display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:21px}
+.panel-title {font-size:19px;font-weight:800;letter-spacing:-.5px;margin:0}
+.panel-sub {font-size:12px;color:var(--muted);margin-top:4px}
+.small-badge {background:#f0f3ed;border-radius:30px;padding:5px 10px;font-size:10px;font-weight:800;white-space:nowrap}
+.reading {font-size:17px;line-height:2.05;letter-spacing:-.2px;color:#334653}
+.reading p {margin:0 0 15px}
+.reading p:last-child {margin-bottom:0}
+mark {background:linear-gradient(transparent 48%,var(--green) 48%);color:inherit;padding:0 2px;font-weight:700}
+.translation {display:none;border-top:1px solid var(--line);padding-top:18px;margin-top:20px}
+.translation.show {display:block}
+.translation-label {font-size:11px;letter-spacing:1px;font-weight:800;color:var(--muted);margin-bottom:10px}
+.translation p {font-size:14px;color:#596874;margin:0 0 11px;line-height:1.9}
+.outline-btn {border:1px solid #dfe5dc;background:white;border-radius:12px;padding:9px 13px;font-size:12px;font-weight:700;color:var(--ink)}
+.outline-btn:hover {background:#f5f8f1}
+.discovery {background:#f2f6ed;border-radius:20px;padding:23px 25px;margin-bottom:18px}
+.discovery .eyebrow {color:#50703d}
+.discovery h3 {font-size:19px;line-height:1.55;margin:9px 0 14px;letter-spacing:-.4px}
+.discovery p {font-size:13px;color:#61715b;margin:0}
+.answer-row {display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.answer-chip {border:1px solid #d8e4d0;background:white;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:700;color:var(--ink)}
+.answer-chip:hover {border-color:#8fbf67;background:#fbfff7}
+.answer-feedback {display:none;margin-top:13px;background:white;border-radius:12px;padding:12px 14px;font-size:13px}
+.answer-feedback.show {display:block}
+.grammar-card {border-radius:22px;background:var(--ink);color:white;padding:25px 27px;margin-bottom:18px}
+.grammar-card .eyebrow {color:var(--green)}
+.grammar-card h2 {font-size:23px;letter-spacing:-.7px;margin:7px 0 16px}
+.formula {display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px}
+.formula span {background:#ffffff14;border:1px solid #ffffff20;padding:7px 11px;border-radius:9px;font-size:12px;font-weight:700}
+.formula b {color:var(--green);font-size:17px}
+.grammar-explain {font-size:13px;color:#d5dfe5;margin:0;line-height:1.9}
+.examples {margin-top:20px;display:grid;gap:9px}
+.example {background:#ffffff0c;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8}
+.example strong {color:var(--green)}
+.example small {display:block;color:#c1cdd4;font-size:12px;margin-top:3px}
+.tip {margin-top:15px;background:#fff0a91c;border:1px solid #fff0a933;padding:12px 14px;border-radius:12px;font-size:12px;color:#f9edb5}
+.quiz-question {padding:19px 0;border-top:1px solid var(--line)}
+.quiz-question:first-of-type {border-top:0;padding-top:0}
+.q-label {font-size:11px;color:#788791;font-weight:800;letter-spacing:1px}
+.q-text {font-size:16px;font-weight:700;margin:7px 0 13px;line-height:1.7}
+.options {display:grid;gap:8px}
+.option {display:flex;align-items:center;gap:11px;text-align:left;width:100%;padding:12px 14px;border:1px solid #e6eae3;border-radius:13px;background:white;color:var(--ink);font-size:13px;transition:.15s}
+.option-letter {display:grid;place-items:center;width:27px;height:27px;flex-shrink:0;border-radius:9px;background:#f0f2ed;font-size:11px;font-weight:800}
+.option:hover:not(:disabled) {border-color:#9bc77b;background:#fbfff7}
+.option.correct {border-color:#75b84c;background:#f0fae9}
+.option.correct .option-letter {background:#b9f278}
+.option.wrong {border-color:#e6a5a0;background:#fff5f4}
+.option:disabled {cursor:default}
+.explanation {display:none;font-size:12px;line-height:1.8;padding:10px 13px;border-radius:10px;background:#f2f5ef;margin-top:8px;color:#52604d}
+.explanation.show {display:block}
+.quiz-result {display:none;border-radius:18px;background:var(--yellow);padding:19px 21px;margin-top:18px}
+.quiz-result.show {display:block}
+.result-title {font-size:18px;font-weight:800}
+.result-copy {font-size:13px;margin-top:4px}
+.action-row {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}
+.primary-btn {border:0;background:var(--ink);color:white;border-radius:13px;padding:13px 20px;font-size:13px;font-weight:800;transition:.15s}
+.primary-btn:hover {background:#2c485d;transform:translateY(-1px)}
+.primary-btn:disabled {opacity:.35;cursor:not-allowed;transform:none}
+.secondary-btn {border:1px solid #dfe5dc;background:transparent;color:var(--ink);border-radius:13px;padding:12px 17px;font-size:12px;font-weight:700}
+.footer-note {text-align:center;color:#98a19a;font-size:11px;margin-top:26px}
+.toast {font-size:12px;color:#5a7150;margin-top:10px}
+.hidden {display:none!important}
+@media(max-width:820px) {
+ .app {padding:18px 16px 45px}
+ .layout {grid-template-columns:1fr;gap:22px}
+ .sidebar {position:static}
+ .sidebar-intro {display:none}
+ .progress-card {margin-bottom:14px;padding:15px 18px}
+ .progress-number {font-size:24px;margin:3px 0 8px}
+ .lesson-nav {display:flex;flex-direction:row;overflow-x:auto;padding-bottom:7px;gap:8px}
+ .lesson-btn {min-width:155px;width:auto;border:1px solid #e4e9df;background:white}
+ .hero {padding:25px 23px}
+ .hero:after {font-size:110px;right:15px}
+ .panel {padding:22px 20px}
+ .reading {font-size:16px}
+ .step {padding:9px 7px;font-size:10px;gap:5px;justify-content:center}
+ .step span {width:21px;height:21px}
+}
+@media(max-width:430px) {
+ .app {padding-left:12px;padding-right:12px}
+ .topbar {margin-bottom:23px}
+ .brand {font-size:16px}
+ .brand-icon {width:36px;height:36px}
+ .streak {font-size:11px;padding:8px 10px}
+ .hero h1 {font-size:32px}
+ .hero:after {opacity:.65}
+ .panel {padding:19px 16px;border-radius:19px}
+ .grammar-card {padding:21px 18px}
+ .discovery {padding:20px 18px}
+ .panel-head {gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">✳</div> Daily English Lab</div>
+    <div class="streak">✦ <span id="headerProgress">0 / 5</span> LESSONS</div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-intro">
+        <div class="eyebrow">YOUR DAILY ROUTINE</div>
+        <h2 class="side-title">Small steps.<br>Real progress.</h2>
+        <p class="side-copy">하루 5분, 실제 영어 속에서 문법을 발견해 보세요.</p>
+      </div>
+      <div class="progress-card">
+        <div class="progress-top"><span>YOUR PROGRESS</span><span>✦</span></div>
+        <div class="progress-number"><span id="progressCount">0</span><span style="font-size:15px;color:#c8d4db"> / 5 lessons</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="eyebrow" style="margin-bottom:10px">LEARNING PATH</div>
+      <nav class="lesson-nav" id="lessonNav"></nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-label" id="heroLabel">LESSON 01 · GRAMMAR IN CONTEXT</div>
+        <h1 id="heroTitle">A New Morning<br>Routine</h1>
+        <p id="heroDesc">작은 습관의 변화로 시작하는 새로운 아침.</p>
+        <div class="hero-bottom">
+          <span class="pill" id="heroGrammar">Present Perfect</span>
+          <span class="pill">5 MIN</span>
+          <span class="pill">READ · DISCOVER · PRACTICE</span>
+        </div>
+      </section>
+
+      <div class="stepbar" id="stepbar">
+        <div class="step active" data-step="1"><span>01</span> Read</div>
+        <div class="step" data-step="2"><span>02</span> Discover</div>
+        <div class="step" data-step="3"><span>03</span> Practice</div>
+      </div>
+
+      <section class="panel" id="readingPanel">
+        <div class="panel-head">
+          <div><div class="eyebrow">01 / READ</div><h2 class="panel-title" style="margin-top:5px">Read the story</h2><div class="panel-sub">문맥을 통해 자연스럽게 영어를 읽어 보세요.</div></div>
+          <span class="small-badge">ENGLISH INPUT</span>
+        </div>
+        <div class="reading" id="passage"></div>
+        <div class="translation" id="translation"><div class="translation-label">한국어 해석</div><div id="translationText"></div></div>
+        <div class="action-row">
+          <button class="outline-btn" id="translationBtn" onclick="toggleTranslation()">한국어 해석 보기 ↓</button>
+          <button class="primary-btn" onclick="goStep(2)">문법 발견하기 →</button>
+        </div>
+      </section>
+
+      <section class="discovery hidden" id="discoveryPanel">
+        <div class="eyebrow">02 / DISCOVER</div>
+        <h3 id="discoveryQuestion">What do you notice about the highlighted sentence?</h3>
+        <p>정답을 보기 전에 먼저 스스로 생각해 보세요.</p>
+        <div class="answer-row" id="discoveryOptions"></div>
+        <div class="answer-feedback" id="discoveryFeedback"></div>
+      </section>
+
+      <section class="grammar-card hidden" id="grammarPanel">
+        <div class="eyebrow">GRAMMAR, SIMPLIFIED</div>
+        <h2 id="grammarTitle"></h2>
+        <div class="formula" id="formula"></div>
+        <p class="grammar-explain" id="grammarExplain"></p>
+        <div class="examples" id="examples"></div>
+        <div class="tip" id="grammarTip"></div>
+        <div class="action-row"><span style="font-size:11px;color:#b9c8d1">핵심을 이해했다면 문제를 풀어 보세요.</span><button class="primary-btn" style="background:var(--green);color:var(--ink)" onclick="goStep(3)">연습 문제 풀기 →</button></div>
+      </section>
+
+      <section class="panel hidden" id="quizPanel">
+        <div class="panel-head">
+          <div><div class="eyebrow">03 / PRACTICE</div><h2 class="panel-title" style="margin-top:5px">Check your understanding</h2><div class="panel-sub">각 문항을 선택하면 해설을 확인할 수 있어요.</div></div>
+          <span class="small-badge">3 QUESTIONS</span>
+        </div>
+        <div id="quizQuestions"></div>
+        <div class="quiz-result" id="quizResult"><div class="result-title" id="resultTitle"></div><div class="result-copy" id="resultCopy"></div></div>
+        <div class="action-row">
+          <button class="secondary-btn" onclick="goStep(2)">← 문법 다시 보기</button>
+          <button class="primary-btn" id="finishBtn" onclick="finishLesson()" disabled>학습 완료하기 ✓</button>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="completePanel">
+        <div style="text-align:center;padding:20px 5px 14px">
+          <div style="font-size:45px;margin-bottom:12px">✳</div>
+          <div class="eyebrow">LESSON COMPLETED</div>
+          <h2 style="font-size:29px;letter-spacing:-1px;margin:8px 0">Nice work!</h2>
+          <p style="font-size:14px;color:var(--muted);max-width:390px;margin:0 auto 20px">오늘의 문법을 문맥 속에서 읽고 연습했어요. 꾸준한 5분이 실력을 만듭니다.</p>
+          <div id="completeScore" style="display:inline-block;background:#f0f5e9;border-radius:14px;padding:12px 19px;font-size:13px;font-weight:800"></div>
+          <div class="action-row" style="justify-content:center;margin-top:24px">
+            <button class="secondary-btn" onclick="reviewLesson()">다시 복습하기</button>
+            <button class="primary-btn" id="nextLessonBtn" onclick="nextLesson()">다음 레슨 →</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="footer-note">DAILY ENGLISH LAB · Learn grammar through real-life English</div>
+</div>
+
+<script>
+const lessons = [
+{
+ title:"A New Morning Routine", desc:"작은 습관의 변화로 시작하는 새로운 아침.",
+ grammar:"Present Perfect", tag:"현재완료", category:"TENSES",
+ passage:[
+  "For years, I woke up late and rushed out of the house every morning. I always felt tired before my day even began.",
+  "Recently, I decided to change my routine. <mark>I have started waking up thirty minutes earlier</mark>, and I use that time to read or go for a short walk.",
+  "I haven't become a morning person overnight, but I have noticed a difference. I feel calmer, and I don't have to rush anymore."
+ ],
+ translation:[
+  "수년 동안 나는 늦게 일어나 매일 아침 서둘러 집을 나섰다. 하루가 시작되기도 전에 항상 피곤했다.",
+  "최근에 나는 생활 습관을 바꾸기로 했다. 30분 더 일찍 일어나기 시작했고, 그 시간을 독서나 짧은 산책에 활용한다.",
+  "하루아침에 아침형 인간이 된 것은 아니지만, 변화를 느끼고 있다. 마음이 더 차분하고 더 이상 서두르지 않아도 된다."
+ ],
+ key:"I have started waking up thirty minutes earlier.",
+ question:"이 문장에서 현재완료를 사용한 이유는 무엇일까요?",
+ choices:["과거의 특정 시각에 일어난 사건만 말하려고","과거에 시작한 변화가 현재까지 이어지는 상황을 말하려고","미래의 계획을 표현하려고"],
+ correct:1, feedback:"현재완료는 과거에 시작된 일이 현재와 연결되어 있음을 나타낼 수 있어요. 여기서는 새로운 습관이 현재의 생활에 영향을 줍니다.",
+ formula:["have / has","＋","과거분사 (p.p.)"],
+ explain:"현재완료는 과거의 경험, 완료, 지속, 현재에 나타난 결과를 표현합니다. 단순과거와 달리 과거의 사건을 현재와 연결해서 바라봅니다.",
+ examples:[
+  ["I have lived here for five years.","나는 이곳에서 5년 동안 살아왔다."],
+  ["She has just finished her homework.","그녀는 방금 숙제를 끝냈다."]
+ ],
+ tip:"for / since는 지속을 나타낼 때 자주 쓰입니다. yesterday, last year처럼 끝난 과거 시점이 명확하면 일반적으로 단순과거를 사용합니다.",
+ quiz:[
+  {q:"I ______ my keys. I can't get into the house.",opts:["lost yesterday","have lost","have lose"],a:1,exp:"현재 열쇠가 없다는 결과가 중요하므로 have lost가 자연스럽습니다."},
+  {q:"We ______ to Jeju last summer.",opts:["have gone","have been","went"],a:2,exp:"last summer라는 끝난 과거 시점이 있으므로 단순과거 went를 씁니다."},
+  {q:"She ______ at this company since 2021.",opts:["has worked","worked yesterday","is work"],a:0,exp:"since 2021은 과거부터 현재까지 이어지는 기간을 나타내므로 has worked가 적절합니다."}
+ ]
+},
+{
+ title:"The Online Shopping Mistake",desc:"온라인 쇼핑에서 생긴 작은 문제를 해결하는 이야기.",
+ grammar:"Past Simple vs. Progressive",tag:"과거시제",category:"TENSES",
+ passage:[
+  "Last Friday, I ordered a jacket online. It looked perfect in the pictures, so I was excited when the package arrived.",
+  "When I tried it on, I realized it was too small. <mark>I was checking the size chart when I noticed</mark> that I had chosen the wrong size.",
+  "I contacted the seller and asked for an exchange. Luckily, the process was simple, and my new jacket arrived a few days later."
+ ],
+ translation:[
+  "지난 금요일 나는 온라인으로 재킷을 주문했다. 사진에서는 완벽해 보여서 택배가 도착했을 때 신이 났다.",
+  "입어 보니 너무 작다는 것을 알았다. 사이즈표를 확인하던 중 내가 잘못된 사이즈를 선택했다는 사실을 발견했다.",
+  "판매자에게 연락해 교환을 요청했다. 다행히 절차는 간단했고 새 재킷은 며칠 후 도착했다."
+ ],
+ key:"I was checking the size chart when I noticed ...",
+ question:"was checking과 noticed의 시제 차이는 어떤 의미를 전달할까요?",
+ choices:["두 동작이 모두 미래에 일어남","진행 중이던 동작과 그 순간 발생한 사건","반복되는 습관과 일반적 사실"],
+ correct:1,feedback:"과거진행형은 당시 진행 중이던 배경 동작을, 단순과거는 그 도중 발생한 사건을 표현합니다.",
+ formula:["was / were + -ing","＋","단순과거 동사"],
+ explain:"과거진행형은 과거의 특정 시점에 진행 중이던 동작을 나타냅니다. when과 함께 사용하면 진행 중인 동작 사이에 발생한 사건을 표현하기 좋습니다.",
+ examples:[
+  ["I was cooking when he called.","그가 전화했을 때 나는 요리하고 있었다."],
+  ["It started raining while we were walking.","우리가 걷고 있는 동안 비가 내리기 시작했다."]
+ ],
+ tip:"길게 진행되던 배경은 was/were + -ing, 그 순간 일어난 사건은 단순과거로 표현하는 경우가 많습니다.",
+ quiz:[
+  {q:"I ______ dinner when the lights went out.",opts:["cooked","was cooking","am cooking"],a:1,exp:"정전이 일어났을 때 진행 중이던 동작이므로 was cooking입니다."},
+  {q:"She ______ her phone while she was running.",opts:["dropped","was dropping","drops"],a:0,exp:"휴대폰을 떨어뜨린 사건을 단순과거 dropped로 표현합니다."},
+  {q:"While we ______ TV, someone knocked on the door.",opts:["watched","were watching","are watching"],a:1,exp:"문을 두드린 순간 진행 중이던 동작이므로 were watching입니다."}
+ ]
+},
+{
+ title:"Making Plans with a Friend",desc:"친구와 약속 시간을 한 시간 앞당길 수 있을까요?",
+ grammar:"Could for Polite Requests",tag:"정중한 요청",category:"EVERYDAY ENGLISH",
+ passage:[
+  "Mina and I planned to meet at a café at four. However, my afternoon schedule changed, and I wanted to meet a little earlier.",
+  "I sent her a message: <mark>Could we move our meeting up by an hour?</mark> I explained that I would be free earlier than expected.",
+  "She said that three o'clock worked for her. We changed the plan, and I was relieved that we could still meet that day."
+ ],
+ translation:[
+  "미나와 나는 4시에 카페에서 만나기로 했다. 하지만 오후 일정이 바뀌어서 조금 더 일찍 만나고 싶었다.",
+  "나는 그녀에게 메시지를 보냈다. '우리 약속을 한 시간 앞당길 수 있을까?' 예상보다 일찍 시간이 날 것이라고 설명했다.",
+  "그녀는 3시가 괜찮다고 했다. 우리는 계획을 바꿨고, 그날 여전히 만날 수 있어서 안심했다."
+ ],
+ key:"Could we move our meeting up by an hour?",
+ question:"이 문장에서 could를 사용하면 어떤 느낌이 될까요?",
+ choices:["상대방에게 명령하는 느낌","정중하게 가능 여부를 묻는 느낌","과거의 능력만 설명하는 느낌"],
+ correct:1,feedback:"Could you ...? / Could we ...?는 부탁이나 제안을 부드럽고 정중하게 표현할 때 유용합니다.",
+ formula:["Could we","＋","동사원형 ...?"],
+ explain:"move something up은 일정이나 시간을 앞당기다, move something back은 뒤로 미루다라는 뜻입니다. Could we ...?는 상대방과 함께 조정할 수 있는지 정중하게 묻는 표현입니다.",
+ examples:[
+  ["Could we move the appointment up by an hour?","예약 시간을 한 시간 앞당길 수 있을까요?"],
+  ["Can we move the meeting back to Friday?","회의를 금요일로 미룰 수 있을까요?"]
+ ],
+ tip:"move up = 더 이른 시간으로, move back = 더 늦은 시간으로. 'by an hour'는 한 시간만큼 변경한다는 뜻입니다.",
+ quiz:[
+  {q:"약속을 30분 앞당기고 싶을 때 가장 자연스러운 표현은?",opts:["move the meeting up by 30 minutes","move the meeting up to 30 minutes","move the meeting back by 30 minutes"],a:0,exp:"move up by 30 minutes는 30분만큼 앞당긴다는 의미입니다."},
+  {q:"Could you ______ the appointment back?",opts:["moving","moved","move"],a:2,exp:"조동사 could 뒤에는 동사원형 move를 사용합니다."},
+  {q:"'약속을 다음 주로 미루다'에 가장 가까운 표현은?",opts:["move the appointment up","put off the appointment until next week","bring the appointment forward"],a:1,exp:"put off는 미루다라는 뜻입니다. move the appointment back도 문맥에 따라 쓸 수 있습니다."}
+ ]
+},
+{
+ title:"A Weekend Without My Phone",desc:"스마트폰 없이 보낸 주말에 새롭게 발견한 것들.",
+ grammar:"Used to vs. Be Used to",tag:"과거 습관",category:"GRAMMAR PAIRS",
+ passage:[
+  "I used to check my phone every few minutes. Even when I was having dinner with friends, I kept looking at notifications.",
+  "Last weekend, I decided to leave my phone at home for a few hours. At first, I felt uncomfortable because <mark>I wasn't used to being disconnected</mark> from everything.",
+  "After a while, I relaxed and enjoyed the walk. I realized that I could have a good day without checking my phone all the time."
+ ],
+ translation:[
+  "나는 몇 분마다 휴대폰을 확인하곤 했다. 친구들과 저녁을 먹을 때조차 알림을 계속 확인했다.",
+  "지난 주말 몇 시간 동안 휴대폰을 집에 두고 나가기로 했다. 처음에는 모든 것과 연결이 끊긴 상태에 익숙하지 않아서 불편했다.",
+  "잠시 후 마음이 편해졌고 산책을 즐겼다. 휴대폰을 계속 확인하지 않아도 좋은 하루를 보낼 수 있다는 것을 깨달았다."
+ ],
+ key:"I wasn't used to being disconnected from everything.",
+ question:"be used to 뒤에 동명사 being이 오는 이유는 무엇일까요?",
+ choices:["to가 전치사이기 때문에","used가 항상 과거형이기 때문에","being이 조동사이기 때문에"],
+ correct:0,feedback:"be used to에서 to는 전치사입니다. 따라서 뒤에 명사나 동명사(-ing)가 옵니다.",
+ formula:["used to + 동사원형","VS","be used to + 명사 / -ing"],
+ explain:"used to는 과거에는 했지만 지금은 그렇지 않은 습관이나 상태를 나타냅니다. be used to는 어떤 상황에 익숙하다는 뜻입니다.",
+ examples:[
+  ["I used to drink coffee every morning.","나는 매일 아침 커피를 마시곤 했다."],
+  ["I'm used to getting up early.","나는 일찍 일어나는 것에 익숙하다."]
+ ],
+ tip:"used to do = 과거의 습관. be used to doing = ~하는 것에 익숙하다. get used to doing = ~하는 것에 익숙해지다.",
+ quiz:[
+  {q:"I ______ play soccer every weekend, but I don't anymore.",opts:["am used to","used to","use to playing"],a:1,exp:"과거에는 반복했지만 지금은 하지 않는 습관이므로 used to play입니다."},
+  {q:"She's used to ______ in a busy office.",opts:["work","worked","working"],a:2,exp:"be used to의 to는 전치사이므로 뒤에 working이 옵니다."},
+  {q:"It took me a month to get used to ______ early.",opts:["wake up","waking up","woke up"],a:1,exp:"get used to 뒤에도 명사나 동명사 waking up을 사용합니다."}
+ ]
+},
+{
+ title:"Learning to Say No",desc:"모든 부탁을 받아들이지 않아도 괜찮다는 것을 배우다.",
+ grammar:"Gerunds vs. Infinitives",tag:"동명사와 to부정사",category:"VERB PATTERNS",
+ passage:[
+  "For a long time, I had trouble saying no to people. I wanted to help everyone, even when I had too much work to do.",
+  "Eventually, I decided <mark>to set clearer boundaries</mark>. I started making a realistic schedule and stopped accepting every request immediately.",
+  "It wasn't easy at first, but I learned to explain my situation honestly. Now, I feel less stressed and have more time to focus on what matters."
+ ],
+ translation:[
+  "오랫동안 나는 사람들에게 거절하는 데 어려움을 겪었다. 할 일이 너무 많을 때도 모든 사람을 도와주고 싶었다.",
+  "결국 나는 더 명확한 경계를 세우기로 했다. 현실적인 일정을 짜기 시작했고 모든 부탁을 즉시 받아들이는 것을 그만두었다.",
+  "처음에는 쉽지 않았지만 내 상황을 솔직하게 설명하는 법을 배웠다. 이제 스트레스가 줄었고 중요한 일에 집중할 시간이 더 많아졌다."
+ ],
+ key:"I decided to set clearer boundaries.",
+ question:"decided 다음에 to set이 오는 이유는 무엇일까요?",
+ choices:["decide는 보통 to부정사를 목적어로 취하기 때문에","모든 동사 뒤에는 to가 오기 때문에","set이 과거분사이기 때문에"],
+ correct:0,feedback:"decide는 일반적으로 to부정사를 목적어로 취합니다. 반면 enjoy, avoid, finish 등은 동명사를 목적어로 취합니다.",
+ formula:["decide / plan / hope","＋","to + 동사원형"],
+ explain:"동사에 따라 뒤에 동명사(-ing) 또는 to부정사가 옵니다. 어떤 형태를 쓰는지는 동사별로 익혀 두는 것이 효과적입니다.",
+ examples:[
+  ["I enjoy reading before bed.","나는 잠자리에 들기 전 독서를 즐긴다."],
+  ["She plans to study abroad.","그녀는 해외에서 공부할 계획이다."]
+ ],
+ tip:"enjoy, avoid, finish + -ing / decide, hope, plan + to부정사. 모든 동사에 적용되는 하나의 규칙이 있는 것은 아닙니다.",
+ quiz:[
+  {q:"I decided ______ a short break.",opts:["taking","to take","take"],a:1,exp:"decide는 to부정사를 목적어로 취하므로 to take가 정답입니다."},
+  {q:"He avoids ______ late for work.",opts:["to be","be","being"],a:2,exp:"avoid 뒤에는 동명사 being을 사용합니다."},
+  {q:"We hope ______ you again soon.",opts:["to see","seeing","saw"],a:0,exp:"hope 뒤에는 일반적으로 to부정사를 사용하므로 to see가 정답입니다."}
+ ]
+}
+];
+
+let current=0;
+let step=1;
+let answers={};
+let discoveryAnswers={};
+let completed=JSON.parse(localStorage.getItem("dailyEnglishCompleted")||"{}");
+let scores=JSON.parse(localStorage.getItem("dailyEnglishScores")||"{}");
+
+function save(){
+ localStorage.setItem("dailyEnglishCompleted",JSON.stringify(completed));
+ localStorage.setItem("dailyEnglishScores",JSON.stringify(scores));
+}
+function renderNav(){
+ const nav=document.getElementById("lessonNav");
+ nav.innerHTML=lessons.map((l,i)=>`
+ <button class="lesson-btn ${i===current?'active':''} ${completed[i]?'done':''}" onclick="openLesson(${i})">
+ <span class="lesson-num">${completed[i]?'✓':String(i+1).padStart(2,'0')}</span>
+ <span class="lesson-meta"><span class="lesson-name">${l.title}</span><span class="lesson-tag">${l.tag}</span></span>
+ </button>`).join("");
+ const count=Object.keys(completed).filter(k=>completed[k]).length;
+ document.getElementById("progressCount").textContent=count;
+ document.getElementById("headerProgress").textContent=count+" / 5";
+ document.getElementById("progressFill").style.width=(count/5*100)+"%";
+}
+function renderLesson(){
+ const l=lessons[current];
+ document.getElementById("heroLabel").textContent=`LESSON ${String(current+1).padStart(2,'0')} · GRAMMAR IN CONTEXT`;
+ document.getElementById("heroTitle").textContent=l.title;
+ document.getElementById("heroDesc").textContent=l.desc;
+ document.getElementById("heroGrammar").textContent=l.grammar;
+ document.getElementById("passage").innerHTML=l.passage.map(p=>`<p>${p}</p>`).join("");
+ document.getElementById("translationText").innerHTML=l.translation.map(p=>`<p>${p}</p>`).join("");
+ document.getElementById("translation").classList.remove("show");
+ document.getElementById("translationBtn").textContent="한국어 해석 보기 ↓";
+ document.getElementById("discoveryQuestion").textContent=l.question;
+ document.getElementById("discoveryOptions").innerHTML=l.choices.map((c,i)=>`<button class="answer-chip" onclick="answerDiscovery(${i})">${c}</button>`).join("");
+ document.getElementById("discoveryFeedback").className="answer-feedback";
+ document.getElementById("discoveryFeedback").textContent="";
+ document.getElementById("grammarTitle").textContent=l.grammar;
+ document.getElementById("formula").innerHTML=l.formula.map((f,i)=>i%2===1?`<b>${f}</b>`:`<span>${f}</span>`).join("");
+ document.getElementById("grammarExplain").textContent=l.explain;
+ document.getElementById("examples").innerHTML=l.examples.map(e=>`<div class="example"><strong>${e[0]}</strong><small>${e[1]}</small></div>`).join("");
+ document.getElementById("grammarTip").textContent="✦ QUICK TIP  "+l.tip;
+ answers[current]=answers[current]||{};
+ document.getElementById("quizQuestions").innerHTML=l.quiz.map((q,qi)=>`
+ <div class="quiz-question" id="question-${qi}">
+ <div class="q-label">QUESTION ${String(qi+1).padStart(2,'0')}</div>
+ <div class="q-text">${q.q}</div>
+ <div class="options">${q.opts.map((o,oi)=>`
+ <button class="option" id="option-${qi}-${oi}" onclick="chooseAnswer(${qi},${oi})">
+ <span class="option-letter">${String.fromCharCode(65+oi)}</span><span>${o}</span>
+ </button>`).join("")}</div>
+ <div class="explanation" id="explanation-${qi}"></div>
+ </div>`).join("");
+ // Reset answers for a fresh attempt unless the lesson is already completed.
+ answers[current]={};
+ document.getElementById("quizResult").classList.remove("show");
+ document.getElementById("finishBtn").disabled=true;
+ document.getElementById("completePanel").classList.add("hidden");
+ document.getElementById("readingPanel").classList.remove("hidden");
+ document.getElementById("discoveryPanel").classList.add("hidden");
+ document.getElementById("grammarPanel").classList.add("hidden");
+ document.getElementById("quizPanel").classList.add("hidden");
+ renderNav();
+ goStep(1);
+}
+function openLesson(i){current=i;renderLesson();window.scrollTo({top:0,behavior:"smooth"});}
+function toggleTranslation(){
+ const box=document.getElementById("translation");
+ box.classList.toggle("show");
+ document.getElementById("translationBtn").textContent=box.classList.contains("show")?"한국어 해석 숨기기 ↑":"한국어 해석 보기 ↓";
+}
+function answerDiscovery(i){
+ const l=lessons[current];
+ const feedback=document.getElementById("discoveryFeedback");
+ feedback.className="answer-feedback show";
+ feedback.innerHTML=(i===l.correct?"<strong>정확해요!</strong> ":"<strong>다시 생각해 보세요.</strong> ")+l.feedback;
+ document.querySelectorAll(".answer-chip").forEach((b,j)=>{b.style.background=j===l.correct?"#e5f5d7":"white";b.style.borderColor=j===l.correct?"#91bf70":"#d8e4d0";});
+}
+function goStep(n){
+ step=n;
+ document.getElementById("readingPanel").classList.toggle("hidden",n!==1);
+ document.getElementById("discoveryPanel").classList.toggle("hidden",n!==2);
+ document.getElementById("grammarPanel").classList.toggle("hidden",n!==2);
+ document.getElementById("quizPanel").classList.toggle("hidden",n!==3);
+ document.getElementById("completePanel").classList.add("hidden");
+ document.querySelectorAll(".step").forEach(el=>{
+  const s=Number(el.dataset.step);
+  el.classList.toggle("active",s===n);
+  el.classList.toggle("past",s<n);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function chooseAnswer(qi,oi){
+ if(answers[current][qi]!==undefined)return;
+ const l=lessons[current],q=l.quiz[qi];
+ answers[current][qi]=oi;
+ q.opts.forEach((_,j)=>{
+  const b=document.getElementById(`option-${qi}-${j}`);
+  b.disabled=true;
+  if(j===q.a)b.classList.add("correct");
+  else if(j===oi)b.classList.add("wrong");
+ });
+ const exp=document.getElementById(`explanation-${qi}`);
+ exp.textContent=(oi===q.a?"정답입니다! ":"아쉬워요. ")+q.exp;
+ exp.classList.add("show");
+ const count=Object.keys(answers[current]).length;
+ if(count===l.quiz.length){
+  const score=l.quiz.filter((x,i)=>answers[current][i]===x.a).length;
+  document.getElementById("resultTitle").textContent=`${score} / ${l.quiz.length} correct`;
+  document.getElementById("resultCopy").textContent=score===3?"완벽해요! 오늘의 문법을 잘 이해했어요.":score===2?"잘했어요. 틀린 문제의 해설을 한 번 더 확인해 보세요.":"해설을 다시 읽고 문법을 복습해 보세요. 다시 도전해도 좋아요.";
+  document.getElementById("quizResult").classList.add("show");
+  document.getElementById("finishBtn").disabled=false;
+ }
+}
+function finishLesson(){
+ const l=lessons[current];
+ const score=l.quiz.filter((x,i)=>answers[current][i]===x.a).length;
+ completed[current]=true;scores[current]=score;save();renderNav();
+ document.getElementById("readingPanel").classList.add("hidden");
+ document.getElementById("discoveryPanel").classList.add("hidden");
+ document.getElementById("grammarPanel").classList.add("hidden");
+ document.getElementById("quizPanel").classList.add("hidden");
+ document.getElementById("completePanel").classList.remove("hidden");
+ document.getElementById("completeScore").textContent=`TODAY'S SCORE  ${score} / 3`;
+ const next=document.getElementById("nextLessonBtn");
+ if(current===lessons.length-1){next.textContent="처음부터 복습하기 ↻";}
+ else{next.textContent="다음 레슨 →";}
+ document.querySelectorAll(".step").forEach(el=>{el.classList.remove("active");el.classList.add("past");});
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function reviewLesson(){renderLesson();goStep(1);}
+function nextLesson(){if(current===lessons.length-1)openLesson(0);else openLesson(current+1);}
+renderLesson();
+</script>
+</body>
+</html>
